@@ -13,6 +13,8 @@ var bola;
 var quadra;
 var arremessadorIMG;
 var cestaIMG;
+var contador = 0;
+var engine;
 
 //aqui
 //var radius = 20;
@@ -26,11 +28,12 @@ function preload() {
 
 function setup() {
 	createCanvas(1300, 400);
-	rectMode(CENTER);
-
 	engine = Engine.create();
 	world = engine.world;
 
+	rectMode(CENTER);
+
+	
 	//Create the Bodies Here.
 	var ball_options = {
 		isStatic: false,
@@ -48,7 +51,7 @@ function setup() {
 	ground = Bodies.rectangle(650, 300, 1300, 20, options);
 	World.add(world, ground);
 
-	left = Bodies.rectangle(260, 230,10, 310, options);
+	left = Bodies.rectangle(260, 230, 10, 310, options);
 	World.add(world, left);
 
 	cesta = Bodies.rectangle(300, 220, 20, 50, options);
@@ -68,27 +71,40 @@ function draw() {
 	background("purple");
 	rectMode(CENTER);
 	image(quadra, 0, 0, 1300, 400)
-	
+	Engine.update(engine)
 	//rect(ground.position.x, ground.position.y, width, 20);
 	//rect(left.position.x, left.position.y, 20, 310);
 
-	
+
 	push();
 	imageMode(CENTER);
-	image(bola,ball.position.x, ball.position.y, 30, 30);
+	image(bola, ball.position.x, ball.position.y, 30, 30);
 	image(cestaIMG, cesta.position.x, cesta.position.y, 70, 40);
 	pop();
 	// keyPressed();
 
 	// Engine.run(engine);
+	textSize(25)
+	fill("white")
+	text("placar:" + contador, 550, 50)
 
+	var collision = Matter.SAT.collides(left.body, ball.body)
+	if (collision.collided) {
+		contador += 3
+
+	}
 }
 
 function keyPressed() {
 
 	if (keyCode === DOWN_ARROW) {
 		//aqui
-		Matter.Body.applyForce(ball, ball.position, { x: -20, y: -10 });
+		Matter.Body.applyForce(ball, ball.position, { x: -12, y: -12 });
+	}
+
+	if (keyCode === RIGHT_ARROW) {
+		//aqui
+		Matter.Body.applyForce(ball, ball.position, { x: 10, y: 0 });
 	}
 
 }
